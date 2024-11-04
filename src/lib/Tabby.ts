@@ -34,7 +34,7 @@ export class Tabby {
     ) {
 
         // throw an error if there is no API KEY
-        if (!this.apiKey) throw new TabbyError("Missing API key.", 400);
+        if (!this.apiKey || !this.merchatCode) throw new TabbyError("Missing API key.", 400);
 
         try {
 
