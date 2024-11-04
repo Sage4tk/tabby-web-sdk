@@ -8,7 +8,7 @@ export class Tabby {
 
     private tabbyHost:string = "https://api.tabby.ai/api/v2/checkout";
     private apiKey:string | null = null;
-    private merchatCode:string | null = null;
+    private merchantCode:string | null = null;
 
     /**
      * Initializes Tabby by setting an API key to communicate with the the Tabby API in order to create sessions. 
@@ -19,7 +19,7 @@ export class Tabby {
 
         // initialize important merchant keys
         this.apiKey= apiKey;
-        this.merchatCode = merchantCode;
+        this.merchantCode = merchantCode;
 
     }
 
@@ -34,7 +34,7 @@ export class Tabby {
     ) {
 
         // throw an error if there is no API KEY
-        if (!this.apiKey || !this.merchatCode) throw new TabbyError("Missing API key.", 400);
+        if (!this.apiKey || !this.merchantCode) throw new TabbyError("Missing API key.", 400);
 
         try {
 
@@ -49,7 +49,7 @@ export class Tabby {
                     },
                     body: JSON.stringify({
                         ...payload,
-                        merchantCode: this.merchatCode,
+                        merchantCode: this.merchantCode,
                         lang: payload.lang ? payload.lang : 'en'
                     })
                 }
@@ -57,20 +57,20 @@ export class Tabby {
 
             // parse the response data
             const data = await response.json();
-
+            
             // handless success
             if (response.ok && response.status === 200 && data.status === "created") return {
                 status: "created",
-                link: data.configuration.available_products.installments.web_url,
+                link: data.configuration.available_products.installments[0].web_url,
                 paymentId: data.payment.id
             }
 
             // return proper message if not created and return project reject message for the UI
             if (response.ok && response.status === 200 && data.status === "") return {
                 status: "rejected",
-                reject_reason: data.products.installments.reject_reason,
-                reject_message: data.products.installments.reject_reason === "order_amount_too_high" ? "This purchase is above your current spending limit with Tabby, try a smaller cart or use another payment method":
-                                data.products.installments.reject_reason === "order_amount_too_low" ? "The purchase amount is below the minimum amount required to use Tabby, try adding more items or use another payment method":
+                rejection_reason: data.configuration.products.installments[0].reject_reason,
+                reject_message: data.configuration.products.installments[0].reject_reason === "order_amount_too_high" ? "This purchase is above your current spending limit with Tabby, try a smaller cart or use another payment method":
+                                data.configuration.products.installments[0].reject_reason === "order_amount_too_low" ? "The purchase amount is below the minimum amount required to use Tabby, try adding more items or use another payment method":
                                 "Sorry, Tabby is unable to approve this purchase. Please use an alternative payment method for your order."
             }
 
