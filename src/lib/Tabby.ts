@@ -25,9 +25,9 @@ export class Tabby {
 
     /**
      * Calls the tabby API to create a session and split the payment in 4.
-     * @param payload 
+     * @param payload PaymentRequest
      * 
-     * @see [Referral] (https://api-docs.tabby.ai/#operation/getCheckoutSession)
+     * @see [Referral] https://api-docs.tabby.ai/#operation/postCheckoutSession
      */
     public async createSession(
         payload: PaymentRequest
@@ -47,7 +47,11 @@ export class Tabby {
                         "Content-Type": "application/json",
                         "Authorization": "Bearer " + this.apiKey
                     },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({
+                        ...payload,
+                        merchantCode: this.merchatCode,
+                        lang: payload.lang ? payload.lang : 'en'
+                    })
                 }
             );
 
@@ -55,7 +59,20 @@ export class Tabby {
             const data = await response.json();
 
             // handless success
-            if (response.ok && response.status === 200) return data;
+            if (response.ok && response.status === 200 && data.status === "created") return {
+                status: "created",
+                link: data.configuration.available_products.installments.web_url,
+                paymentId: data.payment.id
+            }
+
+            // return proper message if not created and return project reject message for the UI
+            if (response.ok && response.status === 200 && data.status === "") return {
+                status: "rejected",
+                reject_reason: data.products.installments.reject_reason,
+                reject_message: data.products.installments.reject_reason === "order_amount_too_high" ? "This purchase is above your current spending limit with Tabby, try a smaller cart or use another payment method":
+                                data.products.installments.reject_reason === "order_amount_too_low" ? "The purchase amount is below the minimum amount required to use Tabby, try adding more items or use another payment method":
+                                "Sorry, Tabby is unable to approve this purchase. Please use an alternative payment method for your order."
+            }
 
             // 200 is not returned return the proper message on why the API call didnt get a success.
             throw new TabbyError(
@@ -65,7 +82,7 @@ export class Tabby {
                 response.status === 404 ? "Incorrect ID":
                 "Something bad happened, We're notified",
                 response.status
-            )
+            );
 
 
         } catch (err) {

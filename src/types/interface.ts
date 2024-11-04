@@ -1,6 +1,6 @@
 export interface Payment {
     amount: string;
-    currency: "AED" | "SAR" | "KWD" | "BHD" | "QAR"; // Fixed value, can use a string union type if there are multiple options
+    currency?: "AED" | "SAR" | "KWD" | "BHD" | "QAR"; // Fixed value, can use a string union type if there are multiple options
     description?: string;
     buyer: Buyer;
     shipping_address: ShippingAddress;
@@ -90,8 +90,7 @@ export interface MerchantUrls {
 // Main interface for the overall structure
 export interface PaymentRequest {
     payment: Payment;
-    lang: "ar" | "en"; // Fixed value, can use a string union type if there are multiple options
-    merchant_code: string;
+    lang?: "ar" | "en"; // Fixed value, can use a string union type if there are multiple options
     merchant_urls?: MerchantUrls;
-    token: string | null; // Assuming token can be null
+    // token?: string | null; // Assuming token can be null
 }
