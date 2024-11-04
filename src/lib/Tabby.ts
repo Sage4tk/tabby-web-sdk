@@ -66,7 +66,7 @@ export class Tabby {
             }
 
             // return proper message if not created and return project reject message for the UI
-            if (response.ok && response.status === 200 && data.status === "") return {
+            if (response.ok && response.status === 200 && data.status === "rejected") return {
                 status: "rejected",
                 rejection_reason: data.configuration.products.installments[0].reject_reason,
                 reject_message: data.configuration.products.installments[0].reject_reason === "order_amount_too_high" ? "This purchase is above your current spending limit with Tabby, try a smaller cart or use another payment method":
