@@ -24,7 +24,7 @@ export interface ShippingAddress {
     zip: string;
 }
 
-interface Item {
+export interface Item {
     title: string; // Required: Name of the product.
     description?: string; // Optional: Description for the product.
     quantity: number; // Required: Quantity of the product ordered. Must be >= 1. Default: 1
