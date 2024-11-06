@@ -20,18 +20,24 @@ const succesPayload:PaymentRequest = {
             loyalty_level: 0
         },
         shipping_address: {
-            address: "Al Ghadeer",
-            city: "DUBAI",
+            address: "Block 13, Silicon Oasis",
+            city: "Dubai",
             zip: "00000"
         },
         order: {
-            reference_id: "awe12321A",
+            reference_id: "b317f738-5d3d-4f41-8ff1-5b6677432b85",
             items: [
 
             ]
         },
         order_history: []
-    }
+    },
+    lang: "en",  // Selection between english or arabic (defaulted as english)
+    merchant_urls: {
+        success: "https://example.com/success",
+        cancel: "https://example.com/cancel",
+        failure: "https://example.com/failure"
+    }, // handle redirect
 }
 
 test("Eligible session test", async () => {
