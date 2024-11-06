@@ -1,9 +1,9 @@
 {
   "name": "tabby-web-sdk",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Web merchant custom implementation for Tabby, the app that lets you split your payments in 4.",
   "main": "dist/index.js",
-  "types": "dist/interface.d.ts",
+  "types": "dist/index.d.ts",
   "browser": "dist/index.js",
   "scripts": {
     "build": "tsc",
@@ -16,5 +16,9 @@
     "jest": "^29.7.0",
     "ts-jest": "^29.2.5",
     "typescript": "^5.6.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sage4tk/tabby-web-sdk"
   }
 }
