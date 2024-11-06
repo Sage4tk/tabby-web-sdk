@@ -44,6 +44,7 @@ export class Tabby {
                 {
                     method: "POST",
                     headers: {
+                        "Accept": "application/json",
                         "Content-Type": "application/json",
                         "Authorization": "Bearer " + this.apiKey
                     },
@@ -84,9 +85,7 @@ export class Tabby {
                 response.status
             );
 
-
         } catch (err) {
-
             
             throw err;
 
