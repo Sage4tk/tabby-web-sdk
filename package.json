@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Web merchant custom implementation for Tabby, the app that lets you split your payments in 4.",
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/interface.d.ts",
   "browser": "dist/index.js",
   "scripts": {
     "build": "tsc",
